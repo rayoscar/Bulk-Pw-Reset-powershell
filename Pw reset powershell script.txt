@@ -1,0 +1,21 @@
+#
+# Script: PW-Reset-DC1-byOCC.ps1
+# Description: Reset the password for bulk users
+#
+Import-Module ActiveDirectory
+# Set the default password
+$Password = Read-Host "Enter the password that you want to set for the users" -AsSecureString
+ 
+# Gets the list of user accounts from the file
+# List the user names one per line in text
+$users = Get-Content -Path \\dc1\dfs\EncryptFS\Information-Technology\OCC-PWreset\U.Names.txt
+ 
+ForEach ($user in $users)
+{
+    # Set the default password for the current account
+    Get-ADUser $user | Set-ADAccountPassword -NewPassword $password -Reset
+   
+    # Validation results returned
+    Write-Host “Password has been reset for the user: $user”
+}
+# ————- End ———–
